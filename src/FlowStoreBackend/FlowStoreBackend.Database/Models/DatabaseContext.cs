@@ -20,6 +20,7 @@ namespace FlowStoreBackend.Database.Models
         public DbSet<Shop> Shops => Set<Shop>();
         public DbSet<ProductInShop> ProductInShops => Set<ProductInShop>();
         public DbSet<ShopEmployees> ShopEmployees => Set<ShopEmployees>();
+        public DbSet<Payment> Payments => Set<Payment>();
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
