@@ -1,31 +1,48 @@
 using FlowStoreBackend.API.ApplicationStart;
-using FlowStoreBackend.Database.Models;
-using Microsoft.EntityFrameworkCore;
+using FlowStoreBackend.API.Middleware;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCustomServices();
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
 
-builder.Services.AddDbContextFactory<DatabaseContext>(options => options.UseNpgsql(builder.Configuration
-    .GetConnectionString("DefaultConnection"), opt => opt.UseNodaTime()), ServiceLifetime.Scoped);
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Host.UseSerilog();
+builder.Services.AddSwaggerServices();
+builder.Services.AddOwnServices();
+builder.Services.AddGeneralServices(builder.Configuration);
+builder.Services.AddAuthenticationServices(builder.Configuration);
+builder.Services.AddAuthorizationServices();
+builder.Services.AddAutoMapperServices();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseMiddleware<ExceptionHandlingMiddleware>();
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseHttpsRedirection();
+
+    app.UseAuthentication();
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Unhandled exception");
+}
+finally
+{
+    Log.Information("Shut down complete");
+    Log.CloseAndFlush();
+}
