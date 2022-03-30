@@ -4,6 +4,7 @@ using FlowStoreBackend.Common.Exceptions;
 using FlowStoreBackend.Common.Helpers;
 using FlowStoreBackend.Common.Pagination;
 using FlowStoreBackend.Database.Models;
+using FlowStoreBackend.Database.Models.Entities;
 using FlowStoreBackend.Logic.Interfaces;
 using FlowStoreBackend.Logic.Models.Category;
 using FlowStoreBackend.Logic.Models.Page;
@@ -59,5 +60,62 @@ namespace FlowStoreBackend.Logic.Services
                 .ToListAsync();
         }
 
+        public async Task<ProductModel> CreateAsync(CreateProductModel createProductModel)
+        {
+            if (!await _databaseContext.Categories.AnyAsync(c => c.Id == createProductModel.CategoryId))
+            {
+                throw new EntityFindException();
+            }
+
+            var product = _mapper.Map<Product>(createProductModel);
+
+            await _databaseContext.Products.AddAsync(product);
+            await _databaseContext.SaveChangesAsync();
+
+            return _mapper.Map<ProductModel>(product);
+        }
+
+        public async Task<ProductModel> UpdateAsync(Guid id, UpdateProductModel updateProductModel)
+        {
+            var product = await _databaseContext.Products.FindAsync(id);
+            if (product is null)
+            {
+                throw new EntityFindException();
+            }
+
+            if(product.CategoryId != updateProductModel.CategoryId)
+            {
+                _ = await _databaseContext.Categories.FindAsync(updateProductModel.CategoryId)
+                    ?? throw new EntityFindException();
+            }
+
+            if(product.Price != updateProductModel.Price)
+            {
+                var priceHistory = new PriceHistory
+                {
+                    OldPrice = product.Price,
+                    ProductId = product.Id
+                };
+
+                await _databaseContext.PriceHistory.AddAsync(priceHistory);
+            }
+
+            _mapper.Map(updateProductModel, product);
+            await _databaseContext.SaveChangesAsync();
+
+            return _mapper.Map<ProductModel>(product);
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var product = await _databaseContext.Products.FindAsync(id);
+            if (product is null)
+            {
+                throw new EntityFindException();
+            }
+            
+            _databaseContext.Products.Remove(product);
+            await _databaseContext.SaveChangesAsync();
+        }
     }
 }

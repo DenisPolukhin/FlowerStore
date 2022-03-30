@@ -9,6 +9,7 @@ namespace FlowStoreBackend.Logic.Profiles
         public ProductProfile()
         {
             CreateMap<Product, ProductModel>();
+            CreateMap<CreateProductModel, ProductModel>();
         }
     }
 }

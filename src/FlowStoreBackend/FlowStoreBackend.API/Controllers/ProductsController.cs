@@ -1,5 +1,6 @@
 ﻿using FlowStoreBackend.Logic.Interfaces;
 using FlowStoreBackend.Logic.Models.Page;
+using FlowStoreBackend.Logic.Models.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -48,6 +49,30 @@ namespace FlowStoreBackend.API.Controllers
         {
             var result = await _productService.GetCategoriesAsync();
             return Ok(result);
+        }
+
+        [Authorize(Policy = "Administrator")]
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateProductModel createProductModel)
+        {
+            await _productService.CreateAsync(createProductModel);
+            return NoContent();
+        }
+
+        [Authorize(Policy = "Administrator")]
+        [HttpPatch("{id:guid}")]
+        public async Task<IActionResult> Update(Guid id, UpdateProductModel updateProductModel)
+        {
+            await _productService.UpdateAsync(id, updateProductModel);
+            return NoContent();
+        }
+
+        [Authorize(Policy = "Administrator")]
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            await _productService.DeleteAsync(id);
+            return NoContent();
         }
     }
 }
