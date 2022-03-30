@@ -11,8 +11,8 @@
         public string Region { get; set; } = default!;
         public string? AreaType { get; set; }
         public string? Area { get; set; }
-        public string? CityType { get; set; }
-        public string? CityName { get; set; }
+        public string? Type { get; set; }
+        public string? Name { get; set; }
         public string? SettlementType { get; set; }
         public string? Settlement { get; set; }
         public string KladrId { get; set; } = default!;

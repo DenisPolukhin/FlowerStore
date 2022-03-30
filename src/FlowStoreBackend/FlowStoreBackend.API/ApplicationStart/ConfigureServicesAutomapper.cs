@@ -1,4 +1,4 @@
-﻿using FlowStoreBackend.Logic.Profiles.User;
+﻿using FlowStoreBackend.Logic.Profiles;
 
 namespace FlowStoreBackend.API.ApplicationStart
 {

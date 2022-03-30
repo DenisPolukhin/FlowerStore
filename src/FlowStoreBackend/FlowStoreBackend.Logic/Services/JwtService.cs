@@ -28,8 +28,7 @@ namespace FlowStoreBackend.Logic.Services
                 expires: DateTime.UtcNow.AddMinutes(jwtConfiguration.LifeTime),
                 signingCredentials: new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256));
 
-            var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
-            return accessToken;
+            return new JwtSecurityTokenHandler().WriteToken(jwtToken);
         }
     }
 }

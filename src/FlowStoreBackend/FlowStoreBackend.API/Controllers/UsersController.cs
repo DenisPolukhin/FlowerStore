@@ -2,6 +2,7 @@
 using FlowStoreBackend.Logic.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FlowStoreBackend.API.Controllers
 {
@@ -10,10 +11,14 @@ namespace FlowStoreBackend.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUsersService _usersService;
-        public UsersController(IUsersService usersService)
+        private readonly IUsersProfilesService _usersProfilesService;
+        public UsersController(IUsersService usersService, IUsersProfilesService usersProfilesService)
         {
             _usersService = usersService;
+            _usersProfilesService = usersProfilesService;
         }
+
+        private Guid UserId => Guid.ParseExact(User.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value, "D");
 
         [AllowAnonymous]
         [HttpPost("[action]")]
@@ -29,6 +34,20 @@ namespace FlowStoreBackend.API.Controllers
         {
             var result = await _usersService.LogInAsync(logInModel);
             return Ok(result);
+        }
+
+        [HttpGet("Profile")]
+        public async Task<IActionResult> ReadProfile()
+        {
+            var result = await _usersProfilesService.ReadProfileAsync(UserId);
+            return Ok(result);
+        }
+
+        [HttpPatch("Profile")]
+        public async Task<IActionResult> UpdateProfile(UpdateUserProfileModel profileModel)
+        {
+            await _usersProfilesService.UpdateProfileAsync(UserId, profileModel);
+            return NoContent();
         }
     }
 }

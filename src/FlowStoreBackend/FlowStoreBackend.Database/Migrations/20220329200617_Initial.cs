@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -49,8 +50,8 @@ namespace FlowStoreBackend.Database.Migrations
                     Region = table.Column<string>(type: "text", nullable: false),
                     AreaType = table.Column<string>(type: "text", nullable: true),
                     Area = table.Column<string>(type: "text", nullable: true),
-                    CityType = table.Column<string>(type: "text", nullable: true),
-                    CityName = table.Column<string>(type: "text", nullable: true),
+                    Type = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: true),
                     SettlementType = table.Column<string>(type: "text", nullable: true),
                     Settlement = table.Column<string>(type: "text", nullable: true),
                     KladrId = table.Column<string>(type: "text", nullable: false),
@@ -297,7 +298,7 @@ namespace FlowStoreBackend.Database.Migrations
                     IsDilevery = table.Column<bool>(type: "boolean", nullable: false),
                     Comment = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    PaymentId = table.Column<Guid>(type: "uuid", nullable: true)
+                    PaymentId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -312,7 +313,8 @@ namespace FlowStoreBackend.Database.Migrations
                         name: "FK_Orders_Payments_PaymentId",
                         column: x => x.PaymentId,
                         principalTable: "Payments",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

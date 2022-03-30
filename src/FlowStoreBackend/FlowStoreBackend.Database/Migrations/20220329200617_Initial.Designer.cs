@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FlowStoreBackend.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20220324172743_Initial")]
+    [Migration("20220329200617_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,12 +60,6 @@ namespace FlowStoreBackend.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("CityName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CityType")
-                        .HasColumnType("text");
-
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasColumnType("text");
@@ -92,6 +86,9 @@ namespace FlowStoreBackend.Database.Migrations
 
                     b.Property<string>("KladrId")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
                         .HasColumnType("text");
 
                     b.Property<string>("Okato")
@@ -130,6 +127,9 @@ namespace FlowStoreBackend.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Type")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.ToTable("Cities");
@@ -150,7 +150,7 @@ namespace FlowStoreBackend.Database.Migrations
                     b.Property<bool>("IsDilevery")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid?>("PaymentId")
+                    b.Property<Guid>("PaymentId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("UserId")
@@ -532,7 +532,9 @@ namespace FlowStoreBackend.Database.Migrations
                 {
                     b.HasOne("FlowStoreBackend.Database.Models.Entities.Payment", "Payment")
                         .WithMany()
-                        .HasForeignKey("PaymentId");
+                        .HasForeignKey("PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("FlowStoreBackend.Database.Models.Entities.User", "User")
                         .WithMany("Orders")
