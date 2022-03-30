@@ -9,6 +9,7 @@ namespace FlowStoreBackend.Logic.Validators.Page
         {
             RuleFor(x => x.Index)
                 .GreaterThanOrEqualTo(1);
+
             RuleFor(x => x.Size)
                 .GreaterThanOrEqualTo(18);
         }
