@@ -29,7 +29,7 @@ namespace FlowStoreBackend.Logic.Services
         public async Task UpdateProfileAsync(Guid userId, UpdateUserProfileModel profileModel)
         {
             var user = await _databaseContext.Users.FindAsync(userId);
-            if(profileModel.CityId != null &&  await _databaseContext.Cities
+            if (profileModel.CityId != null && await _databaseContext.Cities
                 .AnyAsync(x => x.Id == profileModel.CityId))
             {
                 throw new EntityFindException();

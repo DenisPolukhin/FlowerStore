@@ -47,7 +47,7 @@ namespace FlowStoreBackend.Logic.Services
         public async Task<Result> SignUpAsync(SignUpModel signUpModel)
         {
             var user = await _userManager.FindByEmailAsync(signUpModel.Email);
-            if(user is not null)
+            if (user is not null)
             {
                 return new Result(false, "User with this email already exists");
             }
@@ -76,7 +76,7 @@ namespace FlowStoreBackend.Logic.Services
             };
 
             var roles = await _userManager.GetRolesAsync(user);
-            foreach(var role in roles)
+            foreach (var role in roles)
             {
                 accessTokenPayload.Add(new Claim(ClaimTypes.Role, role));
             }
