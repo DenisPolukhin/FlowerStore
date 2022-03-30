@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using FlowStoreBackend.Common.Exceptions;
 using FlowStoreBackend.Database.Models;
-using FlowStoreBackend.Logic.Exceptions;
 using FlowStoreBackend.Logic.Interfaces;
 using FlowStoreBackend.Logic.Models.User;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,4 @@
-﻿using FlowStoreBackend.Logic.Exceptions;
+﻿using FlowStoreBackend.Common.Exceptions;
 using System.Net;
 
 namespace FlowStoreBackend.API.Middleware
@@ -7,7 +7,7 @@ namespace FlowStoreBackend.API.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionHandlingMiddleware> _logger;
-        public ExceptionHandlingMiddleware(RequestDelegate next, 
+        public ExceptionHandlingMiddleware(RequestDelegate next,
             ILogger<ExceptionHandlingMiddleware> logger)
         {
             _next = next;
@@ -20,7 +20,7 @@ namespace FlowStoreBackend.API.Middleware
             {
                 await _next(context);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await ExceptionHandlerAsync(context, ex);
             }

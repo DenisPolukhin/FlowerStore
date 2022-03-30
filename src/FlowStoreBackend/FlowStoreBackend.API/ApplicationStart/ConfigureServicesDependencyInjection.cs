@@ -10,6 +10,7 @@ namespace FlowStoreBackend.API.ApplicationStart
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IUsersProfilesService, UsersProfilesService>();
+            services.AddScoped<IProductsService, ProductsService>();
 
             return services;
         }
