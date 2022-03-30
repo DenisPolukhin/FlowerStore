@@ -9,6 +9,8 @@ namespace FlowStoreBackend.API.ApplicationStart
             services.AddAutoMapper(config =>
             {
                 config.AddProfile<UserProfile>();
+                config.AddProfile<ProductProfile>();
+                config.AddProfile<CategoryProfile>();
             });
 
             return services;

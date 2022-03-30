@@ -41,5 +41,13 @@ namespace FlowStoreBackend.API.Controllers
             var result = await _productService.SearchAsync(searchText, pageModel);
             return Ok(result);
         }
+
+        [AllowAnonymous]
+        [HttpGet("Categories")]
+        public async Task<IActionResult> GetCategories()
+        {
+            var result = await _productService.GetCategoriesAsync();
+            return Ok(result);
+        }
     }
 }

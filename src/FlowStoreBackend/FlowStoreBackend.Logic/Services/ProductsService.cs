@@ -5,6 +5,7 @@ using FlowStoreBackend.Common.Helpers;
 using FlowStoreBackend.Common.Pagination;
 using FlowStoreBackend.Database.Models;
 using FlowStoreBackend.Logic.Interfaces;
+using FlowStoreBackend.Logic.Models.Category;
 using FlowStoreBackend.Logic.Models.Page;
 using FlowStoreBackend.Logic.Models.Product;
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +50,13 @@ namespace FlowStoreBackend.Logic.Services
                     x.Category.Name.Contains(searchTextToLower))
                 .ProjectTo<ProductModel>(_mapper.ConfigurationProvider)
                 .ToPaginatedListAsync(pageModel.Index, pageModel.Size);
+        }
+
+        public async Task<IEnumerable<CategoryModel>> GetCategoriesAsync()
+        {
+            return await _databaseContext.Categories
+                .ProjectTo<CategoryModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
     }

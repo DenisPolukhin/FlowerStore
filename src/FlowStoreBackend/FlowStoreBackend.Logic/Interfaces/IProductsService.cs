@@ -1,4 +1,5 @@
 ﻿using FlowStoreBackend.Common.Pagination;
+using FlowStoreBackend.Logic.Models.Category;
 using FlowStoreBackend.Logic.Models.Page;
 using FlowStoreBackend.Logic.Models.Product;
 
@@ -9,5 +10,7 @@ namespace FlowStoreBackend.Logic.Interfaces
         Task<ProductModel> GetDetailsAsync(Guid id);
         Task<IPaginatedList<ProductModel>> GetCategoryProductAsync(Guid categoryId, PageModel pageModel);
         Task<IPaginatedList<ProductModel>> SearchAsync(string searchText, PageModel pageModel);
+
+        Task<IEnumerable<CategoryModel>> GetCategoriesAsync();
     }
 }
