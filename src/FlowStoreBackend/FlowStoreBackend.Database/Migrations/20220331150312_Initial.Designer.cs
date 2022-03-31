@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FlowStoreBackend.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20220329200617_Initial")]
+    [Migration("20220331150312_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -146,9 +146,6 @@ namespace FlowStoreBackend.Database.Migrations
 
                     b.Property<Instant>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsDilevery")
-                        .HasColumnType("boolean");
 
                     b.Property<Guid>("PaymentId")
                         .HasColumnType("uuid");

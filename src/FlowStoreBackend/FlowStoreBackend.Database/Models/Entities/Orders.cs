@@ -6,7 +6,6 @@ namespace FlowStoreBackend.Database.Models.Entities
     {
         public Guid Id { get; set; }
         public Instant CreatedAt { get; set; } = SystemClock.Instance.GetCurrentInstant();
-        public bool IsDilevery { get; set; }
         public string? Comment { get; set; }
         public Guid UserId { get; set; }
         public User User { get; set; } = default!;

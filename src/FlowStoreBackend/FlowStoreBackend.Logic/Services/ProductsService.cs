@@ -27,6 +27,7 @@ namespace FlowStoreBackend.Logic.Services
         {
             return await _databaseContext.Products
                 .Where(x => x.CategoryId == categoryId)
+                .OrderBy(x => x.Name)
                 .ProjectTo<ProductModel>(_mapper.ConfigurationProvider)
                 .ToPaginatedListAsync(pageModel.Index, pageModel.Size);
         }
@@ -48,7 +49,8 @@ namespace FlowStoreBackend.Logic.Services
             return await _databaseContext.Products
                 .Include(x => x.Category)
                 .Where(x => x.Name.ToLower().Contains(searchTextToLower) ||
-                    x.Category.Name.Contains(searchTextToLower))
+                    x.Category.Name.ToLower().Contains(searchTextToLower))
+                .OrderBy(x => x.Name)
                 .ProjectTo<ProductModel>(_mapper.ConfigurationProvider)
                 .ToPaginatedListAsync(pageModel.Index, pageModel.Size);
         }
@@ -56,6 +58,7 @@ namespace FlowStoreBackend.Logic.Services
         public async Task<IEnumerable<CategoryModel>> GetCategoriesAsync()
         {
             return await _databaseContext.Categories
+                .OrderBy(x => x.Name)
                 .ProjectTo<CategoryModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }

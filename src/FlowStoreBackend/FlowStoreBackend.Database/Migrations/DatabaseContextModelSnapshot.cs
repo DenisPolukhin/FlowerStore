@@ -145,9 +145,6 @@ namespace FlowStoreBackend.Database.Migrations
                     b.Property<Instant>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("IsDilevery")
-                        .HasColumnType("boolean");
-
                     b.Property<Guid>("PaymentId")
                         .HasColumnType("uuid");
 

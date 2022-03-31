@@ -11,6 +11,7 @@ namespace FlowStoreBackend.API.ApplicationStart
                 config.AddProfile<UserProfile>();
                 config.AddProfile<ProductProfile>();
                 config.AddProfile<CategoryProfile>();
+                config.AddProfile<OrderProfile>();
             });
 
             return services;

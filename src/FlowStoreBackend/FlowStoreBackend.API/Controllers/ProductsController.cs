@@ -17,8 +17,6 @@ namespace FlowStoreBackend.API.Controllers
             _productService = productsService;
         }
 
-        private Guid UserId => Guid.ParseExact(User.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value, "D");
-
         [AllowAnonymous]
         [HttpGet("category/{categoryId:guid}")]
         public async Task<IActionResult> GetCategoryProductAsync(Guid categoryId, [FromQuery] PageModel pageModel)
