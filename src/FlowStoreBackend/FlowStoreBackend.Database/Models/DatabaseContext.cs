@@ -27,6 +27,20 @@ namespace FlowStoreBackend.Database.Models
             base.OnModelCreating(builder);
 
             builder
+                .Entity<Order>()
+                .HasMany(o => o.Products)
+                .WithMany(p => p.Orders)
+                .UsingEntity<ProductInOrder>(
+                    j => j
+                .HasOne(pd => pd.Product)
+                .WithMany(p => p.ProductInOrders)
+                .HasForeignKey(pd => pd.ProductId),
+                    j => j
+                .HasOne(pd => pd.Order)
+                .WithMany(o => o.ProductInOrders)
+                .HasForeignKey(pd => pd.OrderId));
+
+            builder
                 .Entity<Shop>()
                 .HasMany(s => s.Products)
                 .WithMany(p => p.Shops)

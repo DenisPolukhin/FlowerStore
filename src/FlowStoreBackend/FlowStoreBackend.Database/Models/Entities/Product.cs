@@ -12,5 +12,6 @@
         public ICollection<PriceHistory> PriceHistory { get; set; } = default!;
         public ICollection<Shop> Shops { get; set; } = default!;
         public ICollection<ProductInShop> ProductsInShop { get; set; } = default!;
+        public ICollection<ProductInOrder> ProductInOrders { get; set; } = default!;
     }
 }

@@ -367,24 +367,25 @@ namespace FlowStoreBackend.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderProduct",
+                name: "ProductInOrder",
                 columns: table => new
                 {
-                    OrdersId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProductsId = table.Column<Guid>(type: "uuid", nullable: false)
+                    OrderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderProduct", x => new { x.OrdersId, x.ProductsId });
+                    table.PrimaryKey("PK_ProductInOrder", x => new { x.OrderId, x.ProductId });
                     table.ForeignKey(
-                        name: "FK_OrderProduct_Orders_OrdersId",
-                        column: x => x.OrdersId,
+                        name: "FK_ProductInOrder_Orders_OrderId",
+                        column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderProduct_Products_ProductsId",
-                        column: x => x.ProductsId,
+                        name: "FK_ProductInOrder_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -433,11 +434,6 @@ namespace FlowStoreBackend.Database.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderProduct_ProductsId",
-                table: "OrderProduct",
-                column: "ProductsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Orders_PaymentId",
                 table: "Orders",
                 column: "PaymentId");
@@ -450,6 +446,11 @@ namespace FlowStoreBackend.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_PriceHistory_ProductId",
                 table: "PriceHistory",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductInOrder_ProductId",
+                table: "ProductInOrder",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
@@ -491,10 +492,10 @@ namespace FlowStoreBackend.Database.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "OrderProduct");
+                name: "PriceHistory");
 
             migrationBuilder.DropTable(
-                name: "PriceHistory");
+                name: "ProductInOrder");
 
             migrationBuilder.DropTable(
                 name: "ProductInShops");

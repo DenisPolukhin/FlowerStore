@@ -12,5 +12,6 @@ namespace FlowStoreBackend.Database.Models.Entities
         public Guid PaymentId { get; set; }
         public Payment Payment { get; set; } = default!;
         public ICollection<Product> Products { get; set; } = default!;
+        public ICollection<ProductInOrder> ProductInOrders { get; set; } = default!;
     }
 }

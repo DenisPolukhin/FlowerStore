@@ -1,4 +1,5 @@
 ﻿using FlowStoreBackend.Logic.Interfaces;
+using FlowStoreBackend.Logic.Models.Order;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -20,6 +21,13 @@ namespace FlowStoreBackend.API.Controllers
         public async Task<IActionResult> GetOrders()
         {
             var result = await _ordersService.GetOrdersAsync(UserId);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateOrderModel createOrderModel)
+        {
+            var result = await _ordersService.CreateOrderAsync(UserId, createOrderModel);
             return Ok(result);
         }
     }

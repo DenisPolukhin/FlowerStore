@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FlowStoreBackend.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20220331150312_Initial")]
+    [Migration("20220404143532_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -236,6 +236,24 @@ namespace FlowStoreBackend.Database.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("FlowStoreBackend.Database.Models.Entities.ProductInOrder", b =>
+                {
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.HasKey("OrderId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductInOrder");
                 });
 
             modelBuilder.Entity("FlowStoreBackend.Database.Models.Entities.ProductInShop", b =>
@@ -510,21 +528,6 @@ namespace FlowStoreBackend.Database.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.Property<Guid>("OrdersId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ProductsId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("OrdersId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("OrderProduct");
-                });
-
             modelBuilder.Entity("FlowStoreBackend.Database.Models.Entities.Order", b =>
                 {
                     b.HasOne("FlowStoreBackend.Database.Models.Entities.Payment", "Payment")
@@ -564,6 +567,25 @@ namespace FlowStoreBackend.Database.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("FlowStoreBackend.Database.Models.Entities.ProductInOrder", b =>
+                {
+                    b.HasOne("FlowStoreBackend.Database.Models.Entities.Order", "Order")
+                        .WithMany("ProductInOrders")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FlowStoreBackend.Database.Models.Entities.Product", "Product")
+                        .WithMany("ProductInOrders")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("FlowStoreBackend.Database.Models.Entities.ProductInShop", b =>
@@ -675,29 +697,21 @@ namespace FlowStoreBackend.Database.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.HasOne("FlowStoreBackend.Database.Models.Entities.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FlowStoreBackend.Database.Models.Entities.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("FlowStoreBackend.Database.Models.Entities.Category", b =>
                 {
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("FlowStoreBackend.Database.Models.Entities.Order", b =>
+                {
+                    b.Navigation("ProductInOrders");
+                });
+
             modelBuilder.Entity("FlowStoreBackend.Database.Models.Entities.Product", b =>
                 {
                     b.Navigation("PriceHistory");
+
+                    b.Navigation("ProductInOrders");
 
                     b.Navigation("ProductsInShop");
                 });
