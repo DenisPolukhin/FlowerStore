@@ -3,7 +3,6 @@ using FlowStoreBackend.Logic.Models.Page;
 using FlowStoreBackend.Logic.Models.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace FlowStoreBackend.API.Controllers
 {
@@ -18,7 +17,7 @@ namespace FlowStoreBackend.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("category/{categoryId:guid}")]
+        [HttpGet("catalog/{categoryId:guid}")]
         public async Task<IActionResult> GetCategoryProductAsync(Guid categoryId, [FromQuery] PageModel pageModel)
         {
             var result = await _productService.GetCategoryProductAsync(categoryId, pageModel);
@@ -42,7 +41,7 @@ namespace FlowStoreBackend.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("Categories")]
+        [HttpGet("Catalog")]
         public async Task<IActionResult> GetCategories()
         {
             var result = await _productService.GetCategoriesAsync();
