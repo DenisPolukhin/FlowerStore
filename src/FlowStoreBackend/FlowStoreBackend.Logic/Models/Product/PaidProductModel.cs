@@ -3,8 +3,9 @@
     public class PaidProductModel
     {
         public Guid Id { get; set; }
-        public string Description { get; set; } = default!;
+        public string Name { get; set; } = default!;
         public int Quantity { get; set; }
+        public decimal UnitPrice { get; set; }
         public decimal TotalPrice { get; set; }
     }
 }

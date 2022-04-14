@@ -1,4 +1,5 @@
-﻿using FlowStoreBackend.Logic.Models.Product;
+﻿using FlowStoreBackend.Database.Models.Enums;
+using FlowStoreBackend.Logic.Models.Product;
 
 namespace FlowStoreBackend.Logic.Models.Order
 {
@@ -7,6 +8,7 @@ namespace FlowStoreBackend.Logic.Models.Order
         public Guid Id { get; set; }
         public string? Comment { get; set; }
         public DateTime CreatedAt { get; set; }
-        public IEnumerable<ProductModel> Products { get; set; } = default!;
+        public PaymentState PaymentState { get; set; }
+        public IEnumerable<PaidProductModel> ProductsInOrder { get; set; } = default!;
     }
 }

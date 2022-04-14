@@ -25,7 +25,7 @@ namespace FlowStoreBackend.Logic.Services
         public async Task<PaymentReference> CreateOrderAsync(Guid userId, CreateOrderModel orderModel)
         {
             var user = await _databaseContext.Users.FindAsync(userId);
-            if(user == null)
+            if (user == null)
             {
                 throw new EntityFindException();
             }
@@ -34,21 +34,21 @@ namespace FlowStoreBackend.Logic.Services
                 .Where(p => orderModel.Products.Select(x => x.Id).Contains(p.Id))
                 .ToListAsync();
 
-            if(products.Count() != orderModel.Products.Select(x => x.Id).Count())
+            if (products.Count() != orderModel.Products.Select(x => x.Id).Count())
             {
                 throw new InvalidOperationException();
             }
 
-            var productsInOrder = products.Select(x => new ProductInOrder
+            var productsInOrder = orderModel.Products.Select(x => new ProductInOrder
             {
                 ProductId = x.Id,
-                Quantity = orderModel.Products.First(x => x.Id == x.Id).Quantity
+                Quantity = x.Quantity
             }).ToList();
 
             var order = new Order
             {
                 User = user,
-                ProductInOrders = productsInOrder
+                ProductsInOrder = productsInOrder
             };
 
             await _databaseContext.Orders.AddAsync(order);
@@ -57,11 +57,12 @@ namespace FlowStoreBackend.Logic.Services
                 Id = order.Id,
                 UserEmail = order.User.Email,
                 UserPhoneNumber = order.User.PhoneNumber,
-                Products = order.ProductInOrders.Select(x => new PaidProductModel
+                Products = order.ProductsInOrder.Select(x => new PaidProductModel
                 {
                     Id = x.ProductId,
+                    Name = x.Product.Name,
+                    UnitPrice = x.Product.Price,
                     TotalPrice = x.Product.Price * x.Quantity,
-                    Description = x.Product.Description,
                     Quantity = x.Quantity
                 })
             };
@@ -75,8 +76,8 @@ namespace FlowStoreBackend.Logic.Services
         public async Task<IEnumerable<OrderModel>> GetOrdersAsync(Guid userId)
         {
             var orders = await _databaseContext.Orders
-                .Where(x => x.UserId == userId)
-                .Include(x => x.Products)
+                .Where(x => x.UserId == userId && x.Payment.PaidAt.HasValue)
+                .Include(x => x.ProductsInOrder)
                 .ToListAsync();
 
             return _mapper.Map<IEnumerable<OrderModel>>(orders);

@@ -48,7 +48,7 @@ namespace FlowStoreBackend.Logic.Services
                     Phone = createPaidOrderUrlModel.UserPhoneNumber,
                     Items = createPaidOrderUrlModel.Products.Select(x => new ReceiptItem
                     {
-                        Description = x.Description,
+                        Description = x.Name,
                         Quantity = x.Quantity,
                         VatCode = VatCode.NoVat,
                         ProductCode = x.Id.ToString(),
@@ -57,7 +57,7 @@ namespace FlowStoreBackend.Logic.Services
                         Amount = new Amount
                         {
                             Currency = "RUB",
-                            Value = x.TotalPrice
+                            Value = x.UnitPrice
                         }
                     }).ToList()
                 }

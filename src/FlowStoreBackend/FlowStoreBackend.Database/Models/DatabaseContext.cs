@@ -33,11 +33,11 @@ namespace FlowStoreBackend.Database.Models
                 .UsingEntity<ProductInOrder>(
                     j => j
                 .HasOne(pd => pd.Product)
-                .WithMany(p => p.ProductInOrders)
+                .WithMany(p => p.ProductsInOrder)
                 .HasForeignKey(pd => pd.ProductId),
                     j => j
                 .HasOne(pd => pd.Order)
-                .WithMany(o => o.ProductInOrders)
+                .WithMany(o => o.ProductsInOrder)
                 .HasForeignKey(pd => pd.OrderId));
 
             builder
