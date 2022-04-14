@@ -1,4 +1,4 @@
 ﻿namespace FlowStoreBackend.Logic.Models.Page
 {
-    public record PageModel(int Index, int Size);
+    public record PageModel(int Index = 1, int Size = 18);
 }

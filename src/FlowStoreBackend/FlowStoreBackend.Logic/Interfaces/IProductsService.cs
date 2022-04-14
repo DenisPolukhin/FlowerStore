@@ -15,6 +15,5 @@ namespace FlowStoreBackend.Logic.Interfaces
 
         Task<ProductModel> CreateAsync(CreateProductModel createProductModel);
         Task<ProductModel> UpdateAsync(Guid id, UpdateProductModel updateProductModel);
-        Task DeleteAsync(Guid id);
     }
 }

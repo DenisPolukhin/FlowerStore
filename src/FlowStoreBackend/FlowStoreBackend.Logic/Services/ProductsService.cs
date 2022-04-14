@@ -26,8 +26,9 @@ namespace FlowStoreBackend.Logic.Services
         public async Task<IPaginatedList<ProductModel>> GetCategoryProductAsync(Guid categoryId, PageModel pageModel)
         {
             return await _databaseContext.Products
+                .AsNoTracking()
                 .Where(x => x.CategoryId == categoryId)
-                .OrderBy(x => x.Name)
+                .OrderBy(x => x.Price)
                 .ProjectTo<ProductModel>(_mapper.ConfigurationProvider)
                 .ToPaginatedListAsync(pageModel.Index, pageModel.Size);
         }
@@ -47,6 +48,7 @@ namespace FlowStoreBackend.Logic.Services
         {
             var searchTextToLower = searchText.Trim().ToLower();
             return await _databaseContext.Products
+                .AsNoTracking()
                 .Include(x => x.Category)
                 .Where(x => x.Name.ToLower().Contains(searchTextToLower) ||
                     x.Category.Name.ToLower().Contains(searchTextToLower))
@@ -58,6 +60,7 @@ namespace FlowStoreBackend.Logic.Services
         public async Task<IEnumerable<CategoryModel>> GetCategoriesAsync()
         {
             return await _databaseContext.Categories
+                .AsNoTracking()
                 .OrderBy(x => x.Name)
                 .ProjectTo<CategoryModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -86,13 +89,13 @@ namespace FlowStoreBackend.Logic.Services
                 throw new EntityFindException();
             }
 
-            if(product.CategoryId != updateProductModel.CategoryId)
+            if (product.CategoryId != updateProductModel.CategoryId)
             {
                 _ = await _databaseContext.Categories.FindAsync(updateProductModel.CategoryId)
                     ?? throw new EntityFindException();
             }
 
-            if(product.Price != updateProductModel.Price)
+            if (product.Price != updateProductModel.Price)
             {
                 var priceHistory = new PriceHistory
                 {
@@ -109,16 +112,5 @@ namespace FlowStoreBackend.Logic.Services
             return _mapper.Map<ProductModel>(product);
         }
 
-        public async Task DeleteAsync(Guid id)
-        {
-            var product = await _databaseContext.Products.FindAsync(id);
-            if (product is null)
-            {
-                throw new EntityFindException();
-            }
-            
-            _databaseContext.Products.Remove(product);
-            await _databaseContext.SaveChangesAsync();
-        }
     }
 }

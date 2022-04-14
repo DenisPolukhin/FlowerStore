@@ -64,12 +64,5 @@ namespace FlowStoreBackend.API.Controllers
             return NoContent();
         }
 
-        [Authorize(Policy = "Administrator")]
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            await _productService.DeleteAsync(id);
-            return NoContent();
-        }
     }
 }
